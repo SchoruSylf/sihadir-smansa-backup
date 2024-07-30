@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset('lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+    <link rel="shortcut icon" href="{{ asset('sihadir-s.jpg') }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -81,6 +82,22 @@
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.jadwal') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-alt"></i>
+                                        <p>
+                                            Jadwal
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.history.presensi') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-check"></i>
+                                        <p>
+                                            Riwayat Presensi
+                                        </p>
+                                    </a>
+                                </li>
                             @elseif(Session::get('role') == 2)
                                 <li class="nav-item">
                                     <a href="{{ route('user.presensi.guru') }}" class="nav-link">
@@ -90,25 +107,39 @@
                                         </p>
                                     </a>
                                 </li>
-                            @endif
-                            <li class="nav-item">
-                                <a href="{{ route('user.history') }}" class="nav-link">
-                                    <i class="nav-icon fas fa-calendar-check"></i>
-                                    <p>
-                                        Riwayat Presensi
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('user.jadwal') }}" class="nav-link">
-                                    <i class="nav-icon fas fa-calendar-alt"></i>
-                                    <p>
-                                        Jadwal
-                                    </p>
-                                </a>
-                            </li>
-
-                            @if (Session::get('role') == 1)
+                                <li class="nav-item">
+                                    <a href="{{ route('user.jadwal') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-alt"></i>
+                                        <p>
+                                            Jadwal
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.history.presensi') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-check"></i>
+                                        <p>
+                                            Riwayat Presensi
+                                        </p>
+                                    </a>
+                                </li>
+                            @elseif (Session::get('role') == 1)
+                                <li class="nav-item">
+                                    <a href="{{ route('user.jadwal') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-alt"></i>
+                                        <p>
+                                            Jadwal
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.history') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-check"></i>
+                                        <p>
+                                            Riwayat Presensi
+                                        </p>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fas fa-chalkboard-teacher"></i>

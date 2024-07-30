@@ -2,11 +2,8 @@
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
-    
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="{{ asset('lte/plugins/sweetalert2/sweetalert2.min.css') }}">
-    <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('lte/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endsection
 
 @section('content-wrapper')
@@ -106,15 +103,12 @@
 
 @section('scripts')
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-    <!-- Select2 -->
-    <script src="{{ asset('lte/plugins/select2/js/select2.full.min.js') }}"></script>
-    
     <script>
         $(document).ready(function() {
             loadData();
-            loadSelect();
         });
 
         function loadData() {
@@ -144,10 +138,10 @@
                         data: 'aksi',
                         name: 'aksi',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
                     }
                 ],
-                deferRender: true
+                deferRender: true,
             });
         }
     </script>

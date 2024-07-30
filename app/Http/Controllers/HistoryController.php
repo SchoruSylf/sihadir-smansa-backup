@@ -20,7 +20,9 @@ class HistoryController extends Controller
      */
     public function create()
     {
-        //
+    //     SELECT 
+    // (TIME_TO_SEC(TIMEDIFF('15:15:00', '12:15:00')) / 60) / (TIME_TO_SEC('00:45:00') / 60) AS result;
+
     }
 
     /**
@@ -38,7 +40,7 @@ class HistoryController extends Controller
     {
         $data = User::get();
 
-        return view('riwayat_presensi', compact('data'));
+        return view('guru.riwayat_presensi', compact('data'));
     }
 
     /**

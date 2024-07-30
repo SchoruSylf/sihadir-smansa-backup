@@ -207,7 +207,8 @@
                         orderable: false,
                         searchable: false
                     }
-                ]
+                ],
+                deferRender: true,
             });
         }
     </script>

@@ -50,7 +50,7 @@ class LoginController extends Controller
         Session::flush();
         $request->session()->regenerate();
         Auth::logout();
-        return redirect()->route('masuk')->with('success', "kamu berhasil logout");
+        return redirect()->route('masuk')->with('success', "Anda berhasil logout");
     }
     public function create()
     {

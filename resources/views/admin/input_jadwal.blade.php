@@ -263,30 +263,22 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Kelas</label>
-                                                                        <select class="select2" id="kelas-update"
-                                                                            style="width: 100%;">
-                                                                        </select>
+                                                                        <select class="select2"
+                                                                            id="kelas-update-{{ $jadwals->id }}"
+                                                                            style="width: 100%;"></select>
                                                                     </div>
-
                                                                     <div class="form-group">
                                                                         <label>Mata Pelajaran</label>
-                                                                        <select class="select22" id="mapel-update"
-                                                                            style="width: 100%;">
-                                                                        </select>
+                                                                        <select class="select2"
+                                                                            id="mapel-update-{{ $jadwals->id }}"
+                                                                            style="width: 100%;"></select>
                                                                     </div>
-                                                                    @error('password')
-                                                                        <small style="color: red">{{ $message }}</small>
-                                                                    @enderror
-
                                                                     <div class="form-group">
                                                                         <label>Guru</label>
-                                                                        <select class="select2" id="guru-update"
-                                                                            style="width: 100%;">
-                                                                        </select>
+                                                                        <select class="select2"
+                                                                            id="guru-update-{{ $jadwals->id }}"
+                                                                            style="width: 100%;"></select>
                                                                     </div>
-                                                                    @error('password')
-                                                                        <small style="color: red">{{ $message }}</small>
-                                                                    @enderror
                                                                 </div>
                                                                 <div class="modal-footer justify-content">
                                                                     <button type="button" class="btn btn-default"
@@ -294,6 +286,7 @@
                                                                     <button type="submit"
                                                                         class="btn btn-primary">Edit</button>
                                                                 </div>
+
                                                             </form>
                                                         </div>
                                                     </div>
@@ -353,12 +346,12 @@
     <script>
         $(document).ready(function() {
             loadData();
+        });
+
+        $('#modal-input').on('shown.bs.modal', function() {
             loadSelectGuru('guru');
             loadSelectKelas('kelas');
             loadSelectMapel('mapel');
-            loadSelectGuru('guru-update');
-            loadSelectKelas('kelas-update');
-            loadSelectMapel("mapel-update");
         });
 
         function loadData() {
@@ -378,38 +371,50 @@
                 },
                 columns: [{
                         data: 'hari',
-                        name: 'hari',
+                        name: 'hari'
                     },
                     {
                         data: 'waktu',
-                        name: 'waktu',
+                        name: 'waktu'
                     },
                     {
                         data: 'kelas',
-                        name: 'kelas',
+                        name: 'kelas'
                     },
-
                     {
                         data: 'kode_mapel',
-                        name: 'kode_mapel',
+                        name: 'kode_mapel'
                     },
-
                     {
                         data: 'nama_mapel',
-                        name: 'nama_mapel',
+                        name: 'nama_mapel'
                     },
-
                     {
                         data: 'name',
-                        name: 'name',
+                        name: 'name'
                     },
                     {
                         data: 'aksi',
                         name: 'aksi',
                         orderable: false,
                         searchable: false
-                    },
-                ]
+                    }
+                ],
+                drawCallback: function(settings) { //Error can't search
+                    // Reinitialize Select2 on each row
+                    $('.select2').select2({
+                        placeholder: 'Select an option',
+                        allowClear: true
+                    });
+
+                    // Loop through each jadwal to apply Select2 for update forms
+                    @foreach ($jadwal as $jadwals)
+                        loadSelectGuru('guru-update-{{ $jadwals->id }}');
+                        loadSelectKelas('kelas-update-{{ $jadwals->id }}');
+                        loadSelectMapel('mapel-update-{{ $jadwals->id }}');
+                    @endforeach
+                },
+                deferRender: true,
             });
         }
 
@@ -437,7 +442,7 @@
                     },
                     cache: true
                 }
-            }).attr('name', 'guru'); // Add name attribute for form submission
+            }).attr('name', 'guru');
         }
 
         function loadSelectKelas(elementId) {
@@ -464,7 +469,7 @@
                     },
                     cache: true
                 }
-            }).attr('name', 'kelas'); // Add name attribute for form submission
+            }).attr('name', 'kelas');
         }
 
         function loadSelectMapel(elementId) {
@@ -491,7 +496,7 @@
                     },
                     cache: true
                 }
-            }).attr('name', 'mapel'); // Add name attribute for form submission
+            }).attr('name', 'mapel');
         }
     </script>
 @endsection

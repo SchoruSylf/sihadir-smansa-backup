@@ -122,9 +122,8 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <!-- form Input --> 
-                                    <a class="btn btn-warning ml-3"
-                                        href="{{ route('user.user.exports') }}">
+                                    <!-- form Input -->
+                                    <a class="btn btn-warning ml-3" href="{{ route('user.user.exports') }}">
                                         Contoh Format file .xlsx
                                     </a>
                                     <form action="{{ route('user.user.input.mass') }}" method="POST"
@@ -388,7 +387,8 @@
                         orderable: false,
                         searchable: false
                     },
-                ]
+                ],
+                deferRender: true,
             });
         }
     </script>

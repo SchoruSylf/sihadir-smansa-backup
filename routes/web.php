@@ -32,14 +32,16 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], fu
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     //Guru
     Route::get('/presensi-guru', [PresensiController::class, 'guru'])->name('presensi.guru');
-    Route::put('/update-guru{detail_presensi}',[PresensiController::class,'update_presensi'])->name('presensi.update');
+    Route::put('/update-guru{detail_presensi}', [PresensiController::class, 'update_presensi'])->name('presensi.update');
+    Route::get('/history', [HistoryController::class, 'read'])->name('history.presensi');
     //Siswa
     Route::get('/presensi-siswa', [PresensiController::class, 'index'])->name('presensi.siswa');
     Route::post('/presensis', [PresensiController::class, 'check_face'])->name('presensis');
+    Route::put('/presensi-validasi', [PresensiController::class, 'presensi_validasi'])->name('presensi.validasi');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
-    Route::get('/history', [HistoryController::class, 'read'])->name('history');
+    Route::get('/histories', [HistoryController::class, 'read'])->name('history');
 
     Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal');
 
@@ -52,7 +54,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], fu
             Route::post('/inputs', [InputController::class, 'user_input_mass'])->name('user.input.mass');
             Route::get('/export', [ExportController::class, 'user_export'])->name('user.export');
             Route::get('/exports', [ExportController::class, 'user_export_dummy'])->name('user.exports');
-            Route::get('/edit/{id_user}', [InputController::class, 'user_edit'])->name('user.edit'); 
+            Route::get('/edit/{id_user}', [InputController::class, 'user_edit'])->name('user.edit');
             Route::put('/update/{id_user}', [InputController::class, 'user_update'])->name('user.update');
             Route::delete('/delete/{id_user}', [InputController::class, 'user_delete'])->name('user.delete');
         });

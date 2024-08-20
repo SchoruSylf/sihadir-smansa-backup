@@ -1,4 +1,4 @@
-@extends('layout.main', ['title' => 'Presensi'])
+@extends('layout.main', ['title' => 'Edit Presensi'])
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
@@ -8,44 +8,37 @@
 
 @section('content-wrapper')
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Presensi</h1>
+                        <h1>Edit Presensi</h1>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
         </section>
 
-        <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-tabs">
                         <div class="card-header">
-                            {{ $jdwlsaatini->kelas . ' ' . $jdwlsaatini->jenis_kelas . ' / ' . $jdwlsaatini->jam_mulai . ' - ' . $jdwlsaatini->jam_selesai . ' / ' . $jdwlsaatini->nama_mapel }}
+                            {{ $jdwl->kelas . ' ' . $jdwl->jenis_kelas . ' / ' . $jdwl->jam_mulai . ' - ' . $jdwl->jam_selesai . ' / ' . $jdwl->nama_mapel }}
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('user.presensi.update_all') }}" method="POST" id="updateStatusForm">
-                                @csrf
-                                <input type="hidden" name="status" value="H">
-                                <input type="hidden" name="presensi_id" value="{{ $checkpresensi->id }}">
-                                <button type="submit" class="btn btn-primary">Semua siswa hadir</button>
-                            </form>
-                            <table id="tableUser" class="table table-bordered table-striped">
+                            <table id="tableEditPresensi" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
-                                        <th>status</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($siswa as $edit_siswa)
-                                        <div class="modal fade" id="modal-presensi-edit{{ $edit_siswa->id }}" tabindex="-1"
-                                            role="dialog" aria-labelledby="modal-update-presensiLabel" aria-hidden="true">
+                                        <div class="modal fade" id="modal-presensi-edit-history{{ $edit_siswa->id }}"
+                                            tabindex="-1" role="dialog" aria-labelledby="modal-update-presensiLabel"
+                                            aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -57,7 +50,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form
-                                                            action="{{ route('user.presensi.update', ['detail_presensi' => $edit_siswa->id]) }}"
+                                                            action="{{ route('user.presensi.update.history', ['detail_presensi' => $edit_siswa->id, 'id' => $presensis_id]) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('PUT')
@@ -112,11 +105,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <script>
         $(document).ready(function() {
-            loadData();
+            loadDataedit();
         });
 
-        function loadData() {
-            var table = $('#tableUser').DataTable({
+        function loadDataedit() {
+            var table = $('#tableEditPresensi').DataTable({
                 searchDelay: 350,
                 processing: true,
                 paging: false,
@@ -126,10 +119,6 @@
                 searching: true,
                 ordering: true,
                 destroy: true,
-                ajax: {
-                    url: "{{ route('user.presensi.guru') }}",
-                    type: 'GET',
-                },
                 columns: [{
                         data: 'name',
                         name: 'name'
@@ -142,7 +131,7 @@
                         data: 'aksi',
                         name: 'aksi',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
                     }
                 ],
                 deferRender: true,

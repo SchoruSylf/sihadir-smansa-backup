@@ -9,6 +9,7 @@ class User_kelas extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id'); // Assuming 'user_id' is the foreign key in 'user_kelas' table

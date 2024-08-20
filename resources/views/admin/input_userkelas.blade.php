@@ -58,6 +58,52 @@
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
+                    <!-- /.modal --><a href="" class="btn btn-primary mb-3" data-toggle="modal"
+                        data-target="#modal-input-mass">
+                        <i class="fas fa-users"></i> Tambah Siswa Menggunakan file XLSX</a>
+                    <div class="modal fade" id="modal-input-mass">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Input Siswa kelas {{ $userKelas->kelas }}
+                                        {{ $userKelas->jenis_kelas }}</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- form Input -->
+                                    <a class="btn btn-warning ml-3" href="{{ route('user.kelas.user_export') }}">
+                                        Contoh Format file .xlsx
+                                    </a>
+                                    <form action="{{ route('user.kelas.input.mass', ['id_kelas' => $userKelas->id]) }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="exampleInputFile">File input</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                            id="exampleInputFile" name="filexlsx">
+                                                        <label class="custom-file-label" for="exampleInputFile">Pilih file
+                                                            data siswa kelas ini</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer justify-content">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-primary">Tambah</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
                     <!-- /.modal -->
                 </div>
                 <!-- Display Data -->
@@ -105,7 +151,8 @@
                                                                 @method('DELETE')
                                                                 <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">Batal</button>
-                                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-danger">Hapus</button>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -123,12 +170,13 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="{{ asset('lte/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <!-- Select2 -->
     <script src="{{ asset('lte/plugins/select2/js/select2.full.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            // bsCustomFileInput.init();
+            bsCustomFileInput.init();
             loadData();
             loadSelect();
         });

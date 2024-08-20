@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'nomor_induk'       => '000000000',
             'name'              => 'admin',
             'role'              => '1',
+            'jenis_kelamin'     => 'P',
             'email'             => 'admin@gmail.com',
             'password'          => Hash::make('admin')
         ]);
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
             'nomor_induk'       => '111111111',
             'name'              => 'guru',
             'role'              => '2',
+            'jenis_kelamin'     => 'L',
             'email'             => 'guru@gmail.com',
             'password'          => Hash::make('guru')
         ]);
@@ -32,6 +34,7 @@ class UserSeeder extends Seeder
             'nomor_induk'       => '222222222',
             'name'              => 'siswa',
             'role'              => '3',
+            'jenis_kelamin'     => 'P',
             'email'             => 'siswa@gmail.com',
             'password'          => Hash::make('siswa')
         ]);

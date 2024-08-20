@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('lte/plugins/sweetalert2/sweetalert2.min.css') }}">
-    <link rel="shortcut icon" href="{{ asset('sihadir-s.jpg') }}">
+    <link rel="shortcut icon" href="{{ asset('sihadir-s.svg') }}">
 </head>
 
 <body class="hold-transition login-page">
@@ -33,7 +33,7 @@
                     @csrf
                     <div class="input-group mb-3">
                         <input type="text" inputmode="numeric" name="nomor_induk" class="form-control"
-                            placeholder="NISN / NIP" pattern="[0-9]{9,18}">
+                            placeholder="NISN / NIP / NIK">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-id-card"></span>
@@ -57,7 +57,7 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
+                                <input type="checkbox" id="remember" name="remember">
                                 <label for="remember">
                                     Tetap masuk
                                 </label>

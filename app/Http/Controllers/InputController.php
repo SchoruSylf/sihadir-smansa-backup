@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Imports\SiswaImport;
+use App\Imports\UserKelasImport;
 use App\Models\Jadwal;
 use App\Models\Kelas;
 use App\Models\Mata_pelajaran;
 use App\Models\User;
 use App\Models\User_kelas;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +23,8 @@ class InputController extends Controller
     public function user_read(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::query()->get();
+            $data = User::query()
+                ->select('id', 'nomor_induk', 'name', 'status', 'email', 'role');
             return DataTables::of($data)
                 ->addColumn('nomor_induk', function ($data) {
                     return $data->nomor_induk;
@@ -39,16 +42,20 @@ class InputController extends Controller
                     return $data->status;
                 })
                 ->addColumn('aksi', function ($data) {
+                    // Access `id` here to create dynamic links or buttons
                     return '<a href="#" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-update-user' . $data->id . '"><i class="fas fa-pen"></i> Edit</a>
                             <a href="#" class="btn btn-danger mb-2" data-toggle="modal" data-target="#modal-delete-user' . $data->id . '"><i class="fas fa-trash-alt"></i> Hapus</a>';
                 })
-                ->rawColumns(['aksi']) // This is important to render the HTML in the action column
+                ->rawColumns(['aksi']) // Important to render HTML in the action column
                 ->make(true);
         }
 
-        $data = User::all();
+        // Retrieve all users with the necessary columns
+        $data = User::select('id', 'nomor_induk', 'name', 'status', 'jenis_kelamin', 'email', 'role')->get();
+
         return view('admin.input_user', compact('data'));
     }
+
     public function user_input(Request $request)
     {
         $validator = FacadesValidator::make($request->all(), [
@@ -56,6 +63,7 @@ class InputController extends Controller
             'name' => 'required',
             'role' => 'required',
             'status' => 'required',
+            'jenis_kelamin' => 'required',
             'email' => 'required|email',
             'password' => 'required',
         ]);
@@ -66,10 +74,11 @@ class InputController extends Controller
         $data['name']           = $request->name;
         $data['role']           = $request->role;
         $data['status']         = $request->status;
+        $data['jenis_kelamin']  = $request->jenis_kelamin;
         $data['email']          = $request->email;
         $data['password']       = Hash::make($request->password);
-
         User::create($data);
+        // dd($data);
         return redirect()->route('user.user.read');
     }
     public function user_input_mass(Request $request)
@@ -77,6 +86,22 @@ class InputController extends Controller
         Excel::import(new SiswaImport(), $request->file('filexlsx'));
         return redirect()->route('user.user.read');
     }
+
+    public function user_input_dataset(Request $request)
+    {
+        $client = new Client();
+        $response = $client->post('http://localhost:5000/process-data', [
+            'json' => [
+                'csv_file_path' => '/path/to/your/csvfile.csv',
+                // Add other necessary parameters
+            ]
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+
+        return response()->json($responseData);
+    }
+
     public function user_edit(Request $request, $id)
     {
         $edit_user = User::find($id);
@@ -245,6 +270,14 @@ class InputController extends Controller
         }
 
         return redirect()->back()->with('success', 'Students added to class successfully.');
+    }
+
+
+    public function kelas_input_user_mass(Request $request, $id_kelas)
+    {
+        Excel::import(new UserKelasImport($id_kelas), $request->file('filexlsx'));
+
+        return redirect()->route('user.kelas.read_user', [$id_kelas]);
     }
     public function kelas_delete_user($id_kelas, $id_userKelas)
     {
@@ -423,7 +456,7 @@ class InputController extends Controller
             ->join('kelas', 'jadwals.kelas_id', '=', 'kelas.id')
             ->where('users.role', '=', '2')
             ->where('jadwals.id', '=', $id_jadwal)
-            ->select('jadwals.id', 'hari', 'jam_mulai','jam_selesai', 'mata_pelajarans.id as mapel_id', 'mata_pelajarans.kode_mapel', 'mata_pelajarans.nama_mapel', 'kelas.id as kelas_id', 'kelas.kelas', 'kelas.jenis_kelas', 'users.id as user_id', 'users.name')
+            ->select('jadwals.id', 'hari', 'jam_mulai', 'jam_selesai', 'mata_pelajarans.id as mapel_id', 'mata_pelajarans.kode_mapel', 'mata_pelajarans.nama_mapel', 'kelas.id as kelas_id', 'kelas.kelas', 'kelas.jenis_kelas', 'users.id as user_id', 'users.name')
             ->first();
 
         // @dd($jadwal);

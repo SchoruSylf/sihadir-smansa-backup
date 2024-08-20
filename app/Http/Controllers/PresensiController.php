@@ -115,13 +115,18 @@ class PresensiController extends Controller
             ->where('jadwals.jam_selesai', '>=', $currentTime)
             ->first();
 
+        $checkpresensi = DB::table('presensis')
+            ->where('jadwal_id', '=', $jdwlsaatini->id)
+            ->where('tanggal', '=', $currentDate)
+            ->first();
+
         if ($jdwlsaatini !== null) {
             // Check if there is already a presence record for today
             $checkpresensi = DB::table('presensis')
                 ->where('jadwal_id', '=', $jdwlsaatini->id)
                 ->where('tanggal', '=', $currentDate)
                 ->first();
-
+            // dd($checkpresensi);
             // Get the students for the current class
             $siswas = DB::table('users')
                 ->join('user_kelas', 'user_kelas.user_id', '=', 'users.id')
@@ -158,7 +163,7 @@ class PresensiController extends Controller
                     ->where('presensi_id', '=', $checkpresensi->id)
                     ->pluck('user_id')
                     ->toArray();
-
+                // dd($existingDetails);
                 foreach ($siswas as $siswa) {
                     if (!in_array($siswa->user_id, $existingDetails)) {
                         $detailPresensi = [
@@ -186,6 +191,12 @@ class PresensiController extends Controller
                 ->where('presensis.jadwal_id', '=', $jdwlsaatini->id)
                 ->get(['detail_presensis.id', 'users.nomor_induk', 'user_kelas.user_id', 'users.name', 'detail_presensis.status']);
 
+            // dd($siswa);
+            // $presensis = Db::table('presensis')
+            //     ->where('presensis.jadwal_id', '=', $jdwlsaatini->id)
+            //     ->select('id')
+            //     ->first();
+            // dd($presensis); 
             if ($request->ajax()) {
                 return DataTables::of($siswa)
                     ->addColumn('name', function ($siswa) {
@@ -201,13 +212,23 @@ class PresensiController extends Controller
                     ->make(true);
             }
 
-            return view('guru.presensi', compact('jdwlsaatini', 'siswa'));
+            return view('guru.presensi', compact('jdwlsaatini', 'siswa', 'checkpresensi'));
         } else {
             if ($currentTime > '15:15:00') {
                 return redirect()->route('user.dashboard')->with('failed', 'Mata Pelajaran pada hari ini sudah selesai');
             }
             return redirect()->route('user.dashboard')->with('failed', 'Mata Pelajaran belum waktunya dimulai');
         }
+    }
+    public function update_presensi_all(Request $request)
+    {
+        dd($request->all());
+        $presensiId = $request->input('presensi_id');
+        $status = $request->input('status');
+        $updated = Detail_presensi::where('presensi_id', $presensiId)
+            ->update(['status' => $status]);
+
+        return redirect()->back();
     }
 
     public function update_presensi(Request $request, $detail_presensi)
@@ -228,10 +249,10 @@ class PresensiController extends Controller
             ->select('jadwals.id', 'jadwals.user_id', 'jadwals.kelas_id', 'jadwals.mapel_id', 'jadwals.hari', 'kode_mapel', 'nama_mapel', 'jam_mulai', 'jam_selesai', 'kelas', 'jenis_kelas')
             ->where('jadwals.user_id', '=', auth()->id())
             ->where('hari', '=', $dayName)
-            // ->where('jadwals.jam_mulai', '<=', $currentTime)
-            // ->where('jadwals.jam_selesai', '>=', $currentTime)
+            ->where('jadwals.jam_mulai', '<=', $currentTime)
+            ->where('jadwals.jam_selesai', '>=', $currentTime)
             ->first();
-
+        // dd($jdwlsaatini, $detail_presensi);
         // Get the specific detail_presensi record for the student
         $detailPresensi = DB::table('detail_presensis')
             ->join('presensis', 'detail_presensis.presensi_id', '=', 'presensis.id')
@@ -243,7 +264,7 @@ class PresensiController extends Controller
             ->where('presensis.jadwal_id', '=', $jdwlsaatini->id)
             ->where('detail_presensis.id', '=', $detail_presensi)
             ->first();
-
+        // dd($detailPresensi, $jdwlsaatini, $detail_presensi);
         // Check if the detail_presensi record exists
         if ($detailPresensi) {
             // Update the status
@@ -255,6 +276,95 @@ class PresensiController extends Controller
         } else {
             return redirect()->route('user.presensi.guru')->with('error', 'Siswa tidak terdaftar silahkan hubungi admin');
         }
+    }
+    public function update_presensi_history(Request $request, $detail_presensi)
+    {
+        // Set the locale to Indonesian
+        Carbon::setLocale('id');
+
+        // Get the current date and time
+        $today = Carbon::now();
+        $dayName = $today->locale('id')->translatedFormat('l');
+        $currentDate = $today->toDateString();
+        $currentTime = $today->toTimeString();
+
+        $jdwl = DB::table('jadwals')
+            ->join('mata_pelajarans', 'jadwals.mapel_id', '=', 'mata_pelajarans.id')
+            ->join('kelas', 'jadwals.kelas_id', '=', 'kelas.id')
+            ->join('presensis', 'jadwals.id', '=', 'presensis.jadwal_id')
+            ->select('jadwals.id', 'jadwals.user_id', 'jadwals.kelas_id', 'jadwals.mapel_id', 'jadwals.hari', 'kode_mapel', 'nama_mapel', 'jam_mulai', 'jam_selesai', 'kelas', 'jenis_kelas')
+            ->where('presensis.id', '=', $request->id)
+            ->first();
+
+        // dd($jdwl, $request->all(), $detail_presensi);
+        // Get the specific detail_presensi record for the student
+        $detailPresensi = DB::table('detail_presensis')
+            ->join('presensis', 'detail_presensis.presensi_id', '=', 'presensis.id')
+            ->join('users', 'detail_presensis.user_id', '=', 'users.id')
+            ->join('user_kelas', 'user_kelas.user_id', '=', 'users.id')
+            ->join('kelas', 'user_kelas.kelas_id', '=', 'kelas.id')
+            ->where('kelas.id', '=', $jdwl->kelas_id)
+            // ->where('presensis.tanggal', '=', $currentDate)
+            ->where('presensis.jadwal_id', '=', $jdwl->id)
+            ->where('detail_presensis.id', '=', $detail_presensi)
+            ->first();
+        // dd($detailPresensi, $jdwl, $detail_presensi);
+        // Check if the detail_presensi record exists
+        if ($detailPresensi) {
+            // Update the status
+            DB::table('detail_presensis')
+                ->where('id', $detail_presensi)
+                ->update(['status' => $request->input('status')]);
+
+            return redirect()->back()->with('success', 'Status siswa telah diperbaharui');
+        } else {
+            return redirect()->back()->with('error', 'Gagal edit');
+        }
+    }
+    public function presensi_edit(Request $request)
+    {
+        $presensis_id = $request->presensi;
+        // Set the locale to Indonesian
+        Carbon::setLocale('id');
+
+        // Get the current date and time
+        $today = Carbon::now();
+        $dayName = $today->locale('id')->translatedFormat('l');
+        $currentDate = $today->toDateString();
+        $currentTime = $today->toTimeString();
+
+        $jdwl = DB::table('jadwals')
+            ->join('mata_pelajarans', 'jadwals.mapel_id', '=', 'mata_pelajarans.id')
+            ->join('kelas', 'jadwals.kelas_id', '=', 'kelas.id')
+            ->join('presensis', 'jadwals.id', '=', 'presensis.jadwal_id')
+            ->select('jadwals.id', 'jadwals.user_id', 'jadwals.kelas_id', 'jadwals.mapel_id', 'jadwals.hari', 'kode_mapel', 'nama_mapel', 'jam_mulai', 'jam_selesai', 'kelas', 'jenis_kelas')
+            ->where('presensis.id', '=', $presensis_id)
+            ->first();
+
+        $siswa = DB::table('detail_presensis')
+            ->join('presensis', 'detail_presensis.presensi_id', '=', 'presensis.id')
+            ->join('users', 'detail_presensis.user_id', '=', 'users.id')
+            ->join('user_kelas', 'user_kelas.user_id', '=', 'users.id')
+            ->join('kelas', 'user_kelas.kelas_id', '=', 'kelas.id')
+            ->where('presensis.id', '=', $presensis_id)
+            ->get(['detail_presensis.id', 'users.nomor_induk', 'user_kelas.user_id', 'users.name', 'detail_presensis.status']);
+
+        // dd($siswa, $jdwl, $request->all());
+        if ($request->ajax()) {
+            return DataTables::of($siswa)
+                ->addColumn('name', function ($siswa) {
+                    return $siswa->nomor_induk . ' - ' . $siswa->name;
+                })
+                ->addColumn('status', function ($siswa) {
+                    return $siswa->status;
+                })
+                ->addColumn('aksi', function ($siswa) {
+                    return '<a href="#" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-presensi-edit-history' . $siswa->id . '"><i class="fas fa-pen"></i> Edit</a>';
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
+        }
+        return view('guru.presensi_edit', compact('jdwl', 'siswa', 'presensis_id'));
     }
     public function check_face(Request $request)
     {
@@ -319,6 +429,7 @@ class PresensiController extends Controller
             );
         }
     }
+
     public function presensi_validasi(Request $request)
     {
         $nomor_induk = $request->input('nomor_induk');

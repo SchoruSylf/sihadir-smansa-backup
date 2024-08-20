@@ -32,7 +32,6 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($mapels as $mapel)
-                                        {{-- @dd($mapels); --}}
                                         <!-- Edit Modal -->
                                         <div class="modal fade" id="modal-update-mapel{{ $mapel->id }}" tabindex="-1"
                                             role="dialog" aria-labelledby="modal-update-mapelLabel" aria-hidden="true">
@@ -59,7 +58,7 @@
                                                                         class="form-control"
                                                                         placeholder="Kode atau Alias pada setiap mata pelajaran"
                                                                         pattern="[a-zA-Z]{2,4}"
-                                                                        value={{ $mapel->kode_mapel }}>
+                                                                        value="{{ $mapel->kode_mapel }}">
                                                                 </div>
                                                                 @error('kode_mapel')
                                                                     <small style="color: red">{{ $message }}</small>
@@ -69,7 +68,7 @@
                                                                     <input type="text" name="nama_mapel"
                                                                         class="form-control"
                                                                         placeholder="Informatika / PPkn / Matematika / A / B"
-                                                                        value={{ $mapel->nama_mapel }}>
+                                                                        value="{{ $mapel->nama_mapel }}">
                                                                 </div>
                                                                 @error('nama_mapel')
                                                                     <small style="color: red">{{ $message }}</small>

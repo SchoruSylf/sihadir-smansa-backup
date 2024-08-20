@@ -42,10 +42,9 @@
                                         @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Nomor Induk</label>
-                                                <input type="text" inputmode="numeric" name="nomor_induk"
-                                                    id="exampleInputEmail1" class="form-control" placeholder="NISN / NIP"
-                                                    pattern="[0-9]{9,19}">
+                                                <label>Nomor Induk</label>
+                                                <input type="text" inputmode="numeric" name="nomor_induk" i
+                                                    class="form-control" placeholder="NISN / NIP / NIK">
                                             </div>
                                             @error('nomor_induk')
                                                 <small style="color: red">{{ $message }}</small>
@@ -53,14 +52,14 @@
                                             <div class="form-group">
                                                 <label for="">Nama</label>
                                                 <input type="text" inputmode="numeric" name="name"
-                                                    id="exampleInputEmail1" class="form-control" placeholder="Nama Lengkap">
+                                                    class="form-control" placeholder="Nama Lengkap">
                                             </div>
                                             @error('name')
                                                 <small style="color: red">{{ $message }}</small>
                                             @enderror
                                             <div class="form-group">
                                                 <label>Role</label>
-                                                <select name="role" class="form-control" id="exampleInputEmail1">
+                                                <select name="role" class="form-control">
                                                     <option value="3">3 (Siswa)</option>
                                                     <option value="2">2 (Guru)</option>
                                                     <option value="1">1 (Administrator)</option>
@@ -71,7 +70,7 @@
                                             @enderror
                                             <div class="form-group">
                                                 <label>Status</label>
-                                                <select name="status" class="form-control" id="exampleInputEmail1">
+                                                <select name="status" class="form-control">
                                                     <option value="Aktif">Aktif</option>
                                                     <option value="Lulus">Lulus</option>
                                                     <option value="Pensiun">Pensiun</option>
@@ -81,9 +80,19 @@
                                                 <small style="color: red">{{ $message }}</small>
                                             @enderror
                                             <div class="form-group">
+                                                <label>Jenis Kelamin</label>
+                                                <select name="jenis_kelamin" class="form-control">
+                                                    <option value="L">Laki - laki</option>
+                                                    <option value="P">Perempuan</option>
+                                                </select>
+                                            </div>
+                                            @error('jenis_kelamin')
+                                                <small style="color: red">{{ $message }}</small>
+                                            @enderror
+                                            <div class="form-group">
                                                 <label for="">Email</label>
                                                 <input type="email" inputmode="numeric" name="email"
-                                                    id="exampleInputEmail1" class="form-control" placeholder="email">
+                                                    class="form-control" placeholder="email">
                                             </div>
                                             @error('email')
                                                 <small style="color: red">{{ $message }}</small>
@@ -91,7 +100,7 @@
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Password</label>
                                                 <input type="password" class="form-control" name="password"
-                                                    id="exampleInputPassword1" placeholder="Password">
+                                                    placeholder="Password">
                                             </div>
                                             @error('password')
                                                 <small style="color: red">{{ $message }}</small>
@@ -176,7 +185,7 @@
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody> 
                                         @foreach ($data as $item)
                                             <!-- Edit Modal -->
                                             <div class="modal fade" id="modal-update-user{{ $item->id }}"
@@ -200,14 +209,12 @@
                                                                 @method('PUT')
                                                                 <div class="card-body">
                                                                     <div class="form-group">
-                                                                        <label for="exampleInputEmail1">Nomor
+                                                                        <label>Nomor
                                                                             Induk</label>
                                                                         <input type="text" inputmode="numeric"
                                                                             name="nomor_induk"
                                                                             value="{{ $item->nomor_induk }}"
-                                                                            id="exampleInputEmail1" class="form-control"
-                                                                            placeholder="NISN / NIP"
-                                                                            pattern="[0-9]{9,19}">
+                                                                            class="form-control" placeholder="NISN / NIS / NIP / NIK">
                                                                     </div>
                                                                     @error('nomor_induk')
                                                                         <small style="color: red">{{ $message }}</small>
@@ -216,7 +223,7 @@
                                                                         <label for="">Nama</label>
                                                                         <input value="{{ $item->name }}" type="text"
                                                                             inputmode="numeric" name="name"
-                                                                            id="name" class="form-control"
+                                                                            class="form-control"
                                                                             placeholder="Nama Lengkap">
                                                                     </div>
                                                                     @error('name')
@@ -224,8 +231,7 @@
                                                                     @enderror
                                                                     <div class="form-group">
                                                                         <label>Role</label>
-                                                                        <select name="role" class="form-control"
-                                                                            id="role">
+                                                                        <select name="role" class="form-control">
                                                                             <option value="{{ $item->role }}">
                                                                                 {{ $item->role }}
                                                                             </option>
@@ -243,25 +249,30 @@
                                                                     @enderror
                                                                     <div class="form-group">
                                                                         <label>Status</label>
-                                                                        <select name="status" class="form-control"
-                                                                            id="status">
+                                                                        <select name="status" class="form-control">
                                                                             <option value="{{ $item->status }}">
                                                                                 {{ $item->status }}
                                                                             </option>
                                                                             <option value="aktif">Aktif</option>
                                                                             <option value="lulus">Lulus</option>
-                                                                            <option value="pensiun">Pensiun
-                                                                            </option>
+                                                                            <option value="pensiun">Pensiun</option>
                                                                         </select>
                                                                     </div>
                                                                     @error('status')
                                                                         <small style="color: red">{{ $message }}</small>
                                                                     @enderror
+                                                                    <div class="form-group"><label>Jenis Kelamin</label>
+                                                                        <select name="jenis_kelamin" class="form-control">
+                                                                            <option value="{{ $item->jenis_kelamin }}">
+                                                                                {{ $item->jenis_kelamin }}</option>
+                                                                            <option value="L">Laki-laki</option>
+                                                                            <option value="P">Perempuan</option>
+                                                                        </select>
+                                                                    </div>
                                                                     <div class="form-group">
                                                                         <label for="">Email</label>
                                                                         <input type="email" inputmode="numeric"
-                                                                            name="email" id="email"
-                                                                            value="{{ $item->email }}"
+                                                                            name="email" value="{{ $item->email }}"
                                                                             class="form-control" placeholder="email">
                                                                     </div>
                                                                     @error('email')
@@ -336,7 +347,7 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('lte/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
         $(function() {
             bsCustomFileInput.init();

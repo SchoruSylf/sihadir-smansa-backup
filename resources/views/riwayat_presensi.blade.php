@@ -27,19 +27,13 @@
                                     <tr>
                                         <th>Hari</th>
                                         <th>Kode Mata Pelajaran</th>
-                                        <th></th>
+                                        <th>Kelas</th>
                                         <th>Jumlah Jam</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data as $id)
-                                        <tr>
-                                            <td>{{ $id->name }}</td>
-                                            <td>{{ $id->email }}</td>
-                                            {{-- <td>{{ $id->password }}</td> --}}
-                                        </tr>
-                                    @endforeach
-                                    </tfoot>
+                                </tbody>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -49,14 +43,64 @@
         </section>
         <!-- /.content -->
     </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('lte/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
     <script>
         $(function() {
-            $("#tableExport").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            bsCustomFileInput.init();
         });
+
+        $(document).ready(function() {
+            loadData();
+        });
+
+        function loadData() {
+            $('#tableUser').DataTable({
+                searchDelay: 350,
+                processing: true,
+                paging: true,
+                autoWidth: false,
+                serverSide: true,
+                responsive: true,
+                searching: true,
+                ordering: true,
+                destroy: true,
+                ajax: {
+                    url: "{{ route('user.user.read') }}",
+                    type: 'GET',
+                },
+                columns: [{
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'hari',
+                        name: 'hari'
+                    },
+                    {
+                        data: 'kode_mapel',
+                        name: 'kode_mapel'
+                    },
+                    {
+                        data: 'kelas',
+                        name: 'kelas'
+                    },
+                    {
+                        data: 'total_jam',
+                        name: 'total_jam'
+                    },
+                    {
+                        data: 'aksi',
+                        name: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                deferRender: true,
+            });
+        }
     </script>
 @endsection

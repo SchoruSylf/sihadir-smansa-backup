@@ -14,7 +14,7 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-
+        {{-- @dd(Session::all()) --}}
         <!-- Main content -->
         <section class="content">
             @if (Session::get('role') == 1)
@@ -113,4 +113,5 @@
             Swal.fire('{{ $message }}');
         </script>
     @endif
+    
 @endsection

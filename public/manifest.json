@@ -8,10 +8,9 @@
     "theme_color": "#6777ef",
     "icons": [
         {
-            "src": "sihadir-s.jpg",
-            "sizes": "4000x4000",
-            "type": "image/svg+xml",
-            "purpose": "any maskable"
+            "src": "/sihadir-s.ico",
+            "sizes": "192x192",
+            "type": "image/x-icon"
         }
     ]
 }

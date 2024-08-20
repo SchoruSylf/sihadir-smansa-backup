@@ -162,7 +162,7 @@ class JadwalController extends Controller
                     }
                 }
                 return [
-                    'time_range' => $timeSchedules->first()->jam_mulai . '-' . $timeSchedules->first()->jam_selesai,
+                    'time_range' => $timeSchedules->first()->jam_mulai . ' - ' . $timeSchedules->first()->jam_selesai,
                     'slots' => $slots,
                     'is_break' => $timeSchedules->first()->is_break ?? false,
                 ];

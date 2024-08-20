@@ -1,3 +1,4 @@
+/* General Table Styles */
 .custom-table th,
 .custom-table td {
     text-align: center;
@@ -19,9 +20,7 @@
 .custom-table .hari-column,
 .waktu-column {
     text-align: center;
-    /* Horizontal center alignment */
     vertical-align: middle !important;
-    /* Vertical center alignment */
 }
 
 .istirahat-cell {

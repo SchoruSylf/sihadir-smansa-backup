@@ -3,10 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <title>{{ $title ?? '' }} | SIHADIR</title>
     @yield('css')
     <!-- Google Font: Source Sans Pro -->
@@ -18,7 +17,11 @@
     <link rel="stylesheet" href="{{ asset('lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
-    <link rel="shortcut icon" href="{{ asset('sihadir-s.jpg') }}">
+    {{-- <link rel="shortcut icon" href="{{ asset('sihadir-s.jpg') }}"> --}}
+    <link rel="shortcut icon" href="{{ asset('sihadir-s.ico') }}" type="image/jpeg">
+    <!-- Sweet Alert 2-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -133,7 +136,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('user.history') }}" class="nav-link">
+                                    <a href="{{ route('user.history.presensi') }}" class="nav-link">
                                         <i class="nav-icon fas fa-calendar-check"></i>
                                         <p>
                                             Riwayat Presensi
@@ -215,6 +218,18 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 
     @yield('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Display SweetAlert2 if there is an error message -->
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Akses Ditolak',
+                text: '{{ session('error') }}',
+            });
+        </script>
+    @endif
 </body>
 
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportPresensi;
 use App\Exports\ExportUser;
 use App\Exports\ExportUserDummy;
 use App\Exports\ExportUserKelas;
@@ -25,5 +26,11 @@ class ExportController extends Controller
     {
         $currentYear = date('Y');
         return Excel::download(new ExportUserKelas, "Contoh Data Siswa Kelas SIHADIR SMANSA $currentYear .xlsx");
+    }
+
+    public function detail_presensis(Request $request)
+    {
+        $currentYear = date('Y');
+        return Excel::download(new ExportPresensi, "Laporan Presensi Siswa $currentYear .xlsx");
     }
 }

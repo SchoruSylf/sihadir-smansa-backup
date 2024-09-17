@@ -24,6 +24,7 @@
                         <!-- BAR CHART Kelas 10-->
                         <div class="card card-warning">
                             <div class="card-header">
+                                {{ $data_pengguna }}
                                 <h3 class="card-title">Data Presensi Kelas 10</h3>
                             </div>
                             <div class="card-body">
@@ -113,5 +114,4 @@
             Swal.fire('{{ $message }}');
         </script>
     @endif
-    
 @endsection

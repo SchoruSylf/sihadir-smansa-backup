@@ -25,7 +25,7 @@ class InputController extends Controller
         if ($request->ajax()) {
             $data = User::query()
                 ->select('id', 'nomor_induk', 'name', 'status', 'email', 'role');
-            return DataTables::of($data)
+            return DataTables::of($data)->addIndexColumn()
                 ->addColumn('nomor_induk', function ($data) {
                     return $data->nomor_induk;
                 })
@@ -43,17 +43,47 @@ class InputController extends Controller
                 })
                 ->addColumn('aksi', function ($data) {
                     // Access `id` here to create dynamic links or buttons
-                    return '<a href="#" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-update-user' . $data->id . '"><i class="fas fa-pen"></i> Edit</a>
-                            <a href="#" class="btn btn-danger mb-2" data-toggle="modal" data-target="#modal-delete-user' . $data->id . '"><i class="fas fa-trash-alt"></i> Hapus</a>';
+                    return '<a href="#" class="edit btn btn-primary mb-2" name="edit" id="' . $data->id . '" ><i class="fas fa-pen"></i> Edit</a>
+                            <a href="#" class="btn btn-danger delete mb-2" name="delete" id="' . $data->id . '" ><i class="fas fa-trash-alt"></i> Hapus</a>';
                 })
-                ->rawColumns(['aksi']) // Important to render HTML in the action column
+                ->rawColumns(['aksi'])
                 ->make(true);
         }
 
-        // Retrieve all users with the necessary columns
-        $data = User::select('id', 'nomor_induk', 'name', 'status', 'jenis_kelamin', 'email', 'role')->get();
+        return view('admin.input_user');
 
-        return view('admin.input_user', compact('data'));
+        // if ($request->ajax()) {
+        //     $data = User::query()
+        //         ->select('id', 'nomor_induk', 'name', 'status', 'email', 'role');
+        //     return DataTables::of($data)
+        //         ->addColumn('nomor_induk', function ($data) {
+        //             return $data->nomor_induk;
+        //         })
+        //         ->addColumn('name', function ($data) {
+        //             return $data->name;
+        //         })
+        //         ->addColumn('email', function ($data) {
+        //             return $data->email;
+        //         })
+        //         ->addColumn('role', function ($data) {
+        //             return $data->role;
+        //         })
+        //         ->addColumn('status', function ($data) {
+        //             return $data->status;
+        //         })
+        //         ->addColumn('aksi', function ($data) {
+        //             // Access `id` here to create dynamic links or buttons
+        //             return '<a href="#" class="edit btn btn-primary  mb-2" data-toggle="modal" data-target="#modal-update-user' . $data->id . '"><i class="fas fa-pen"></i> Edit</a>
+        //                     <a href="#" class="btn btn-danger delete mb-2" data-toggle="modal" data-target="#modal-delete-user' . $data->id . '"><i class="fas fa-trash-alt"></i> Hapus</a>';
+        //         })
+        //         ->rawColumns(['aksi']) // Important to render HTML in the action column
+        //         ->make(true);
+        // }
+
+        // // Retrieve all users with the necessary columns
+        // $data = User::select('id', 'nomor_induk', 'name', 'status', 'jenis_kelamin', 'email', 'role')->get();
+
+        // return view('admin.input_user', compact('data'));
     }
 
     public function user_input(Request $request)
@@ -68,7 +98,7 @@ class InputController extends Controller
             'password' => 'required',
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
+        // if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
 
         $data['nomor_induk']    = $request->nomor_induk;
         $data['name']           = $request->name;
@@ -79,7 +109,10 @@ class InputController extends Controller
         $data['password']       = Hash::make($request->password);
         User::create($data);
         // dd($data);
-        return redirect()->route('user.user.read');
+        // return redirect()->route('user.user.read');
+
+        // return view('admin.input_user');
+        return response()->json(['success' => 'Data Pengguna berhasil ditambahkan.']);
     }
     public function user_input_mass(Request $request)
     {
@@ -102,13 +135,19 @@ class InputController extends Controller
         return response()->json($responseData);
     }
 
-    public function user_edit(Request $request, $id)
+    public function user_edit($id)
     {
-        $edit_user = User::find($id);
-        return redirect()->route('user.user.read', compact('edit_user'));
+        if (request()->ajax()) {
+            $data = User::findOrFail($id);
+            return response()->json(['result' => $data]);
+        }
+        // $edit_user = User::find($id);
+        // return redirect()->route('user.user.read');
     }
-    public function user_update(Request $request, $id)
+    public function user_update(Request $request)
     {
+        // dd($request->all());
+        // if (request()->ajax()) {
         $validator = FacadesValidator::make($request->all(), [
             'nomor_induk' => 'required',
             'name' => 'required',
@@ -117,8 +156,13 @@ class InputController extends Controller
             'email' => 'required|email',
             'password' => 'nullable',
         ]);
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+        // if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
 
-        if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
+        // if ($validator->fails()) return response()->json(['fail' => 'Data updated failed.']);
 
         $data['nomor_induk']    = $request->nomor_induk;
         $data['name']           = $request->name;
@@ -128,11 +172,15 @@ class InputController extends Controller
         if ($request->password) {
             $data['password']       = Hash::make($request->password);
         }
-        User::whereId($id)->update($data);
-        return redirect()->route('user.user.read');
+        User::whereId($request->hidden_id)->update($data);
+        // return redirect()->route('user.user.read');
+        // return response()->json(['data request' => $request->all()]);
+        return response()->json(['success' => 'Data updated successfully.']);
+        // }
     }
     public function user_delete($id)
     {
+        // dd($id);
         $user_delete = User::find($id);
         if ($user_delete) {
             $user_delete->delete();

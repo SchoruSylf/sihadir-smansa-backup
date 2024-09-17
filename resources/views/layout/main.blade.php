@@ -21,7 +21,6 @@
     <link rel="shortcut icon" href="{{ asset('sihadir-s.ico') }}" type="image/jpeg">
     <!-- Sweet Alert 2-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

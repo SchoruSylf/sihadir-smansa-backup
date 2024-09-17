@@ -44,33 +44,35 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <a class="btn btn-warning mb-3" href="{{ route('user.user.export') }}">
-                                Export Riwayat Presensi
-                            </a>
-                            <div class="table-responsive">
-                                <table id="tableHistory" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Tanggal</th>
-                                            <th>Hari</th>
-                                            <th>Kode Mata Pelajaran</th>
-                                            <th>Kelas</th>
-                                            <th>Jumlah Jam Mata Pelajaran / 45 Menit</th>
-                                            <th>Alpha</th>
-                                            <th>Hadir</th>
-                                            <th>Sakit</th>
-                                            <th>Ijin</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                    @if (Session::get('role') == 1 || Session::get('role') == 2)
+                        <div class="card">
+                            <div class="card-body">
+                                <a class="btn btn-warning mb-3" href="{{ route('user.history.detail.export') }}">
+                                    Export Riwayat Presensi
+                                </a>
+                                <div class="table-responsive">
+                                    <table id="tableHistory" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Hari</th>
+                                                <th>Kode Mata Pelajaran</th>
+                                                <th>Kelas</th>
+                                                <th>Jumlah Jam Mata Pelajaran / 45 Menit</th>
+                                                <th>Alpha</th>
+                                                <th>Hadir</th>
+                                                <th>Sakit</th>
+                                                <th>Ijin</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </section>

@@ -115,11 +115,6 @@ class PresensiController extends Controller
             ->where('jadwals.jam_selesai', '>=', $currentTime)
             ->first();
 
-        $checkpresensi = DB::table('presensis')
-            ->where('jadwal_id', '=', $jdwlsaatini->id)
-            ->where('tanggal', '=', $currentDate)
-            ->first();
-
         if ($jdwlsaatini !== null) {
             // Check if there is already a presence record for today
             $checkpresensi = DB::table('presensis')
@@ -212,6 +207,11 @@ class PresensiController extends Controller
                     ->make(true);
             }
 
+            $checkpresensi = DB::table('presensis')
+                ->where('jadwal_id', '=', $jdwlsaatini->id)
+                ->where('tanggal', '=', $currentDate)
+                ->first();
+
             return view('guru.presensi', compact('jdwlsaatini', 'siswa', 'checkpresensi'));
         } else {
             if ($currentTime > '15:15:00') {
@@ -222,7 +222,7 @@ class PresensiController extends Controller
     }
     public function update_presensi_all(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $presensiId = $request->input('presensi_id');
         $status = $request->input('status');
         $updated = Detail_presensi::where('presensi_id', $presensiId)
@@ -368,7 +368,7 @@ class PresensiController extends Controller
     }
     public function check_face(Request $request)
     {
-        $response = Http::post('http://127.0.0.1:5000/', $request->only('image'));
+        $response = Http::post(env("API_URL"), $request->only('image'));
 
         if ($response->successful()) {
             $responseData = $response->json();

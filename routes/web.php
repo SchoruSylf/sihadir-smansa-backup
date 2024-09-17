@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\UserController;
 use BladeUIKit\Components\Forms\Inputs\Input;
 
 /*
@@ -28,7 +29,14 @@ Route::get('/', [LoginController::class, 'index'])->name('masuk');
 Route::post('/masuk', [LoginController::class, 'login'])->name('masuk.proses');
 Route::get('/logout', [LoginController::class, 'logout'])->name('keluar');
 
+Route::get('users', [UserController::class, 'index'])->name('users.index');
+Route::post('users/store', [UserController::class, 'store'])->name('users.store');
+Route::get('users/edit/{id}/', [UserController::class, 'edit']);
+Route::post('users/update', [UserController::class, 'update'])->name('users.update');
+Route::get('users/destroy/{id}/', [UserController::class, 'destroy']);
+
 Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -52,9 +60,10 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], fu
         Route::put('/presensi-validasi', [PresensiController::class, 'presensi_validasi'])->name('presensi.validasi');
         Route::get('/histories-siswa', [HistoryController::class, 'read'])->name('history.siswa');
     });
-    Route::group(['middleware' => ['auth', 'role:guru,admin']], function () {
+    Route::group(['middleware' => ['auth', 'role:guru,admin,siswa']], function () {
         Route::get('/history', [HistoryController::class, 'index'])->name('history.presensi');
         Route::get('/chart', [HistoryController::class, 'loadChartData'])->name('history.presensi.chart');
+        Route::get('/export-riwayat-presensi', [ExportController::class, 'detail_presensis'])->name('history.detail.export');
     });
 
     // User Routes
@@ -68,8 +77,9 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], fu
                 Route::get('/export', [ExportController::class, 'user_export'])->name('user.export');
                 Route::get('/exports', [ExportController::class, 'user_export_dummy'])->name('user.exports');
                 Route::get('/edit/{id_user}', [InputController::class, 'user_edit'])->name('user.edit');
-                Route::put('/update/{id_user}', [InputController::class, 'user_update'])->name('user.update');
-                Route::delete('/delete/{id_user}', [InputController::class, 'user_delete'])->name('user.delete');
+                Route::post('/update', [InputController::class, 'user_update'])->name('user.update');
+                // Route::put('/update/{id_user}', [InputController::class, 'user_update'])->name('user.update');
+                Route::get('/delete/{id_user}', [InputController::class, 'user_delete'])->name('user.delete');
             });
             // Kelas Routes
             Route::prefix('kelas')->group(function () {

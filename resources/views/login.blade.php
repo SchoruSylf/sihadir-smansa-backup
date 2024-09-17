@@ -33,7 +33,7 @@
                     @csrf
                     <div class="input-group mb-3">
                         <input type="text" inputmode="numeric" name="nomor_induk" class="form-control"
-                            placeholder="NISN / NIP / NIK">
+                            placeholder="NISN / NIK">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-id-card"></span>

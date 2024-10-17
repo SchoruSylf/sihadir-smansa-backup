@@ -75,7 +75,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], fu
                 Route::post('/inputs', [InputController::class, 'user_input_mass'])->name('user.input.mass');
                 Route::post('/dataset', [InputController::class, 'user_input_dataset']);
                 Route::get('/export', [ExportController::class, 'user_export'])->name('user.export');
-                Route::get('/exports', [ExportController::class, 'user_export_dummy'])->name('user.exports');
+                Route::get('/export/dummy', [ExportController::class, 'user_export_dummy'])->name('user.exports');
                 Route::get('/edit/{id_user}', [InputController::class, 'user_edit'])->name('user.edit');
                 Route::post('/update', [InputController::class, 'user_update'])->name('user.update');
                 // Route::put('/update/{id_user}', [InputController::class, 'user_update'])->name('user.update');
@@ -111,6 +111,8 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], fu
                 Route::post('/input', [InputController::class, 'jadwal_input'])->name('jadwal.input');
                 Route::post('/inputs', [InputController::class, 'jadwal_input_mass'])->name('jadwal.input.mass');
                 Route::get('/export', [ExportController::class, 'jadwal_export'])->name('jadwal.export');
+                Route::get('/getdataHari',[inputController::class, 'checkSelesai'])->name('jadwal.check_selesai');
+                Route::get('/jadwal/unavailable-times', [InputController::class, 'jamTerdaftar'])->name('user.jadwal.unavailable_times');
                 Route::get('/read_selector_user', [InputController::class, 'jadwal_read_selector_user'])->name('jadwal.read_selector_user');
                 Route::get('/read_selector_kelas', [InputController::class, 'jadwal_read_selector_kelas'])->name('jadwal.read_selector_kelas');
                 Route::get('/read_selector_mapel', [InputController::class, 'jadwal_read_selector_mapel'])->name('jadwal.read_selector_mapel');

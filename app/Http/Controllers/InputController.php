@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\JadwalImport;
 use App\Imports\SiswaImport;
 use App\Imports\UserKelasImport;
 use App\Models\Jadwal;
@@ -23,8 +24,7 @@ class InputController extends Controller
     public function user_read(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::query()
-                ->select('id', 'nomor_induk', 'name', 'status', 'email', 'role');
+            $data = User::query()->get();
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('nomor_induk', function ($data) {
                     return $data->nomor_induk;
@@ -98,6 +98,9 @@ class InputController extends Controller
             'password' => 'required',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
         // if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
 
         $data['nomor_induk']    = $request->nomor_induk;
@@ -146,8 +149,6 @@ class InputController extends Controller
     }
     public function user_update(Request $request)
     {
-        // dd($request->all());
-        // if (request()->ajax()) {
         $validator = FacadesValidator::make($request->all(), [
             'nomor_induk' => 'required',
             'name' => 'required',
@@ -156,7 +157,7 @@ class InputController extends Controller
             'email' => 'required|email',
             'password' => 'nullable',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
@@ -175,12 +176,11 @@ class InputController extends Controller
         User::whereId($request->hidden_id)->update($data);
         // return redirect()->route('user.user.read');
         // return response()->json(['data request' => $request->all()]);
-        return response()->json(['success' => 'Data updated successfully.']);
+        return response()->json(['success' => 'Data berhasil diperbarui.']);
         // }
     }
     public function user_delete($id)
     {
-        // dd($id);
         $user_delete = User::find($id);
         if ($user_delete) {
             $user_delete->delete();
@@ -319,8 +319,6 @@ class InputController extends Controller
 
         return redirect()->back()->with('success', 'Students added to class successfully.');
     }
-
-
     public function kelas_input_user_mass(Request $request, $id_kelas)
     {
         Excel::import(new UserKelasImport($id_kelas), $request->file('filexlsx'));
@@ -405,8 +403,22 @@ class InputController extends Controller
             ->join('mata_pelajarans', 'jadwals.mapel_id', '=', 'mata_pelajarans.id')
             ->join('kelas', 'jadwals.kelas_id', '=', 'kelas.id')
             ->where('users.role', '=', '2')
-            ->select('jadwals.id', 'hari', 'jam_mulai', 'jam_selesai', 'mata_pelajarans.id as mapel_id', 'mata_pelajarans.kode_mapel', 'mata_pelajarans.nama_mapel', 'kelas.id as kelas_id', 'kelas.kelas', 'kelas.jenis_kelas', 'users.id as user_id', 'users.name')
+            ->select(
+                'jadwals.id',
+                'hari',
+                DB::raw("TIME_FORMAT(jam_mulai, '%H:%i') as jam_mulai"), // Format jam_mulai to hh:mm
+                DB::raw("TIME_FORMAT(jam_selesai, '%H:%i') as jam_selesai"), // Format jam_selesai to hh:mm
+                'mata_pelajarans.id as mapel_id',
+                'mata_pelajarans.kode_mapel',
+                'mata_pelajarans.nama_mapel',
+                'kelas.id as kelas_id',
+                'kelas.kelas',
+                'kelas.jenis_kelas',
+                'users.id as user_id',
+                'users.name'
+            )
             ->get();
+
         if ($request->ajax()) {
             return DataTables::of($jadwal)
                 ->addColumn('hari', function ($jadwal) {
@@ -429,15 +441,16 @@ class InputController extends Controller
                 })
                 ->addColumn('aksi', function ($jadwal) {
                     return '<a href="#" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-update-jadwal' . $jadwal->id . '"><i class="fas fa-pen"></i> Edit</a>
-                            <a href="#" class="btn btn-danger mb-2" data-toggle="modal" data-target="#modal-delete-jadwal' . $jadwal->id . '"><i class="fas fa-trash-alt"></i> Hapus</a>';
+                        <a href="#" class="btn btn-danger mb-2" data-toggle="modal" data-target="#modal-delete-jadwal' . $jadwal->id . '"><i class="fas fa-trash-alt"></i> Hapus</a>';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
         }
 
-        // The $jadwals variable is now available here
+        // Return the view with the $jadwal data
         return view('admin.input_jadwal', compact('jadwal'));
     }
+
     public function jadwal_read_selector_user(Request $request)
     {
         $users = User::where('role', '=', '2')
@@ -475,18 +488,72 @@ class InputController extends Controller
 
         return response()->json($users);
     }
+    public function checkSelesai(Request $request)
+    {
+        $kelas = $request->input('kelas');
+        $hari = $request->input('hari');
+        $jam_mulai = $request->input('jam_mulai');
+        // dd($kelas);
+        // Query the database to find schedules that conflict with the selected class, day, and start time
+        $unavailableTimes = DB::table('jadwals')
+            ->where('kelas_id', "=", $kelas)
+            ->where('hari', $hari)
+            ->where('jam_mulai', $jam_mulai)
+            ->pluck('jam_selesai');
+        // dd($unavailableTimes);
+        // Return the unavailable jam_selesai times as a JSON response
+        return response()->json($unavailableTimes);
+        // $hari = $request->get('hari');
+        // $schedule = Jadwal::where('hari', $hari)->get();
+
+        // return response()->json($schedule);
+    }
+    public function jamTerdaftar(Request $request)
+    {
+        // $hari = $request->input('hari');
+
+        // // Fetch unavailable times for the selected day
+        // $jadwals = DB::table('jadwals')
+        //     ->where('hari', '=', $hari)
+        //     ->get(['jam_mulai', 'jam_selesai']);
+        // // dd($jadwals);
+        // return response()->json($jadwals);
+        $hari = $request->input('hari');
+        $kelas = $request->input('kelas');
+        // dd($kelas);
+        // Fetch unavailable times for the selected day
+        $jadwals = DB::table('jadwals')
+            ->where('hari', '=', $hari)
+            ->where('kelas_id', "=", $kelas)
+            ->get('jam_mulai');
+
+        // Format the times to hh:mm
+        $jadwals = $jadwals->map(function ($jadwal) {
+            $jadwal->jam_mulai = \Carbon\Carbon::createFromFormat('H:i:s', $jadwal->jam_mulai)->format('H:i');
+            // $jadwal->jam_selesai = \Carbon\Carbon::createFromFormat('H:i:s', $jadwal->jam_selesai)->format('H:i');
+            return $jadwal;
+        });
+        // $kelas = $request->input('kelas');
+        // dd($kelas);
+        // $kelas = DB::table('kelas')
+        // Return the formatted times as JSON
+        return response()->json($jadwals);
+    }
     public function jadwal_input(Request $request)
     {
         $validator = FacadesValidator::make($request->all(), [
             'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i',
             'kelas' => 'required',
             'mapel' => 'required',
             'guru' => 'required',
         ]);
-        if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
+        // if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
         $jadwal['hari']         = $request->hari;
         $jadwal['user_id']      = $request->guru;
         $jadwal['mapel_id']     = $request->mapel;
@@ -495,6 +562,14 @@ class InputController extends Controller
         $jadwal['jam_selesai']  = $request->jam_selesai;
         Jadwal::create($jadwal);
         return redirect()->back()->with('success', 'Students added to class successfully.');
+
+        // return response()->json(['success' => 'Jadwal berhasil ditambahkan.']);
+    }
+    public function jadwal_input_mass(Request $request)
+    {
+        Excel::import(new JadwalImport(), $request->file('filexlsx'));
+        // dd($request);
+        return redirect()->route('user.jadwal.read');
     }
     public function jadwal_update(Request $request, $id_jadwal)
     {
@@ -507,16 +582,19 @@ class InputController extends Controller
             ->select('jadwals.id', 'hari', 'jam_mulai', 'jam_selesai', 'mata_pelajarans.id as mapel_id', 'mata_pelajarans.kode_mapel', 'mata_pelajarans.nama_mapel', 'kelas.id as kelas_id', 'kelas.kelas', 'kelas.jenis_kelas', 'users.id as user_id', 'users.name')
             ->first();
 
-        // @dd($jadwal);
+        // dd($request->all());
         $validator = FacadesValidator::make($request->all(), [
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
-            'kelas' => 'required',
-            'mapel' => 'required',
-            'guru' => 'required',
+            // 'kelas' => 'required',
+            // 'mapel' => 'required',
+            // 'guru' => 'required',
         ]);
         // dd($jadwal->kelas_id, $request->kelas);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
         $data_jadwal['hari']         = $request->hari;
         $data_jadwal['user_id']      = $request->guru ?? $jadwal->user_id;
         $data_jadwal['mapel_id']     = $request->mapel ?? $jadwal->mapel_id;
@@ -524,7 +602,8 @@ class InputController extends Controller
         $data_jadwal['jam_mulai']    = $request->jam_mulai;
         $data_jadwal['jam_selesai']  = $request->jam_selesai;
         Jadwal::whereId($id_jadwal)->update($data_jadwal);
-        return redirect()->back()->with('success', 'Students added to class successfully.');
+        return redirect()->back()->with('success', 'Jadwal berhasil diperbarui.');
+        // return response()->json(['success' => 'Jadwal berhasil diperbarui.']);
     }
     public function jadwal_delete($id_jadwal)
     {

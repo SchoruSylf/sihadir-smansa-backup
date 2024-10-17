@@ -1,13 +1,5 @@
 @extends('layout.main', ['title' => 'Data Pengguna'])
 @section('css')
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"> --}}
-    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <link rel="stylesheet" href="https:/cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
@@ -35,6 +27,7 @@
                             class="fas fa-user-plus"></i> Tambah Pengguna</button>
                     <a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-input-mass">
                         <i class="fas fa-users"></i> Tambah Pengguna Menggunakan file XLSX</a>
+                    {{-- Modal Input mass --}}
                     <div class="modal fade" id="modal-input-mass">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -110,8 +103,9 @@
                     </div>
                 </div>
             </div>
+            {{-- MODAL INPUT & UPDATE --}}
             <div class="modal fade" id="formInputUpdate" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <form method="POST" enctype="multipart/form-data" id="formUser" class="form-horizontal">
                             <div class="modal-header">
@@ -203,7 +197,7 @@
             </div>
             <!-- Delete Modal -->
             <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <form method="POST" id="formUser" class="form-horizontal">
                             <div class="modal-header">
@@ -215,7 +209,6 @@
                             <div class="modal-body">
                                 <p>Apakah anda yakin ingin menghapus data pengguna milik
                                 <p id="namedelete" name="namedelete"></p>
-                                {{-- <b>{{ $item->name }}</b> --}}
                                 </p>
                             </div>
                             <div class="modal-footer justify-content">
@@ -409,8 +402,10 @@
                         html = '<div class="alert alert-success">' + data.success +
                             '</div>';
                         $('#formUser')[0].reset();
-                        $('#formInputUpdate').modal('hide');
                         $('#tableUser').DataTable().ajax.reload();
+                        // setTimeout(function {
+                        $('#formInputUpdate').modal('hide');
+                        // },1000);
                     }
                     $('#form_result').html(html);
                 },

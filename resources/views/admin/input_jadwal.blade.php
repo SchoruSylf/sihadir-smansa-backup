@@ -39,67 +39,67 @@
                                         @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label>Hari</label>
-                                                <select name="hari" id="" class="form-control">
+                                                <label for="hari">Hari</label>
+                                                <select name="hari" id="hari" class="form-control select2"
+                                                    style="width: 100%;">
+                                                    <option value=""></option>
                                                     <option value="Senin">Senin</option>
                                                     <option value="Selasa">Selasa</option>
                                                     <option value="Rabu">Rabu</option>
                                                     <option value="Kamis">Kamis</option>
                                                     <option value="Jumat">Jumat</option>
+                                                    <!-- Add more days if necessary -->
                                                 </select>
                                             </div>
-
-                                            <div class="form-group">
-                                                <label>Jam Mulai</label>
-                                                <select name="jam_mulai" id="jam_mulai" class="form-control">
-                                                    <option value="06:45:00">06:45</option>
-                                                    <option value="07:00:00">07:00</option>
-                                                    <option value="07:45:00">07:45</option>
-                                                    <option value="08:30:00">08:30</option>
-                                                    <option value="09:15:00">09:15</option>
-                                                    <option value="09:30:00">09:30</option>
-                                                    <option value="10:15:00">10:15</option>
-                                                    <option value="11:00:00">11:00</option>
-                                                    <option value="12:15:00">12:15</option>
-                                                    <option value="13:00:00">13:00</option>
-                                                    <option value="13:45:00">13:45</option>
-                                                    <option value="14:30:00">14:30</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label>Jam Selesai</label>
-                                                <select name="jam_selesai" id="jam_selesai" class="form-control">
-                                                    <option value="07:00:00">07:00</option>
-                                                    <option value="07:45:00">07:45</option>
-                                                    <option value="08:30:00">08:30</option>
-                                                    <option value="09:15:00">09:15</option>
-                                                    <option value="10:00:00">10:00</option>
-                                                    <option value="10:15:00">10:15</option>
-                                                    <option value="11:00:00">11:00</option>
-                                                    <option value="11:45:00">11:45</option>
-                                                    <option value="13:00:00">13:00</option>
-                                                    <option value="13:45:00">13:45</option>
-                                                    <option value="14:30:00">14:30</option>
-                                                    <option value="15:15:00">15:15</option>
-                                                </select>
-                                            </div>
-
                                             <div class="form-group">
                                                 <label>Kelas</label>
                                                 <select class="select2" id="kelas" style="width: 100%;">
                                                 </select>
                                             </div>
-
                                             <div class="form-group">
                                                 <label>Mata Pelajaran</label>
                                                 <select class="select2" id="mapel" style="width: 100%;">
                                                 </select>
                                             </div>
-
                                             <div class="form-group">
                                                 <label>Guru</label>
                                                 <select class="select2" id="guru" style="width: 100%;">
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Jam Mulai</label>
+                                                <select name="jam_mulai" id="jam_mulai" class="form-control">
+                                                    <option value=""></option>
+                                                    <option value="06:45">06:45</option>
+                                                    <option value="07:00">07:00</option>
+                                                    <option value="07:45">07:45</option>
+                                                    <option value="08:30">08:30</option>
+                                                    <option value="09:15">09:15</option>
+                                                    <option value="09:30">09:30</option>
+                                                    <option value="10:15">10:15</option>
+                                                    <option value="11:00">11:00</option>
+                                                    <option value="12:15">12:15</option>
+                                                    <option value="13:00">13:00</option>
+                                                    <option value="13:45">13:45</option>
+                                                    <option value="14:30">14:30</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Jam Selesai</label>
+                                                <select name="jam_selesai" id="jam_selesai" class="form-control">
+                                                    <option value=""></option>
+                                                    <option value="07:00">07:00</option>
+                                                    <option value="07:45">07:45</option>
+                                                    <option value="08:30">08:30</option>
+                                                    <option value="09:15">09:15</option>
+                                                    <option value="10:00">10:00</option>
+                                                    <option value="10:15">10:15</option>
+                                                    <option value="11:00">11:00</option>
+                                                    <option value="11:45">11:45</option>
+                                                    <option value="13:00">13:00</option>
+                                                    <option value="13:45">13:45</option>
+                                                    <option value="14:30">14:30</option>
+                                                    <option value="15:15">15:15</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -116,8 +116,7 @@
                         <!-- /.modal-dialog -->
                     </div>
                     <!-- /.modal -->
-                    <a href="" class="btn btn-secondary mb-3 disabled" data-toggle="modal"
-                        data-target="#modal-input-mass" disabled>
+                    <a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-input-mass">
                         <i class="fas fa-users"></i> Tambah Jadwal file XLSX</a>
                     <div class="modal fade" id="modal-input-mass">
                         <div class="modal-dialog modal-dialog-centered">
@@ -130,10 +129,10 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- form Input -->
-                                    <a class="btn btn-warning ml-3" href="{{ route('user.user.exports') }}">
+                                    <a class="btn btn-warning ml-3" href="{{ route('user.jadwal.exports') }}">
                                         Contoh Format file .xlsx
                                     </a>
-                                    <form action="{{ route('user.user.input.mass') }}" method="POST"
+                                    <form action="{{ route('user.jadwal.input.mass') }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="card-body">
@@ -144,7 +143,7 @@
                                                         <input type="file" class="custom-file-input"
                                                             id="exampleInputFile" name="filexlsx">
                                                         <label class="custom-file-label" for="exampleInputFile">Pilih file
-                                                            data pengguna</label>
+                                                            jadwal </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -226,18 +225,18 @@
                                                                             class="form-control">
                                                                             <option value={{ $jadwals->jam_mulai }}>
                                                                                 {{ $jadwals->jam_mulai }}</option>
-                                                                            <option value="06:45:00">06:45</option>
-                                                                            <option value="07:00:00">07:00</option>
-                                                                            <option value="07:45:00">07:45</option>
-                                                                            <option value="08:30:00">08:30</option>
-                                                                            <option value="09:15:00">09:15</option>
-                                                                            <option value="09:30:00">09:30</option>
-                                                                            <option value="10:15:00">10:15</option>
-                                                                            <option value="11:00:00">11:00</option>
-                                                                            <option value="12:15:00">12:15</option>
-                                                                            <option value="13:00:00">13:00</option>
-                                                                            <option value="13:45:00">13:45</option>
-                                                                            <option value="14:30:00">14:30</option>
+                                                                            <option value="06:45">06:45</option>
+                                                                            <option value="07:00">07:00</option>
+                                                                            <option value="07:45">07:45</option>
+                                                                            <option value="08:30">08:30</option>
+                                                                            <option value="09:15">09:15</option>
+                                                                            <option value="09:30">09:30</option>
+                                                                            <option value="10:15">10:15</option>
+                                                                            <option value="11:00">11:00</option>
+                                                                            <option value="12:15">12:15</option>
+                                                                            <option value="13:00">13:00</option>
+                                                                            <option value="13:45">13:45</option>
+                                                                            <option value="14:30">14:30</option>
                                                                         </select>
                                                                     </div>
 
@@ -247,18 +246,18 @@
                                                                             class="form-control">
                                                                             <option value={{ $jadwals->jam_selesai }}>
                                                                                 {{ $jadwals->jam_selesai }}</option>
-                                                                            <option value="07:00:00">07:00</option>
-                                                                            <option value="07:45:00">07:45</option>
-                                                                            <option value="08:30:00">08:30</option>
-                                                                            <option value="09:15:00">09:15</option>
-                                                                            <option value="10:00:00">10:00</option>
-                                                                            <option value="10:15:00">10:15</option>
-                                                                            <option value="11:00:00">11:00</option>
-                                                                            <option value="11:45:00">11:45</option>
-                                                                            <option value="13:00:00">13:00</option>
-                                                                            <option value="13:45:00">13:45</option>
-                                                                            <option value="14:30:00">14:30</option>
-                                                                            <option value="15:15:00">15:15</option>
+                                                                            <option value="07:00">07:00</option>
+                                                                            <option value="07:45">07:45</option>
+                                                                            <option value="08:30">08:30</option>
+                                                                            <option value="09:15">09:15</option>
+                                                                            <option value="10:00">10:00</option>
+                                                                            <option value="10:15">10:15</option>
+                                                                            <option value="11:00">11:00</option>
+                                                                            <option value="11:45">11:45</option>
+                                                                            <option value="13:00">13:00</option>
+                                                                            <option value="13:45">13:45</option>
+                                                                            <option value="14:30">14:30</option>
+                                                                            <option value="15:15">15:15</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group">
@@ -286,7 +285,6 @@
                                                                     <button type="submit"
                                                                         class="btn btn-primary">Edit</button>
                                                                 </div>
-
                                                             </form>
                                                         </div>
                                                     </div>
@@ -309,7 +307,9 @@
                                                         <div class="modal-body">
                                                             <p>Apakah anda yakin ingin menghapus jadwal
                                                                 <b>{{ $jadwals->kode_mapel }}</b>
-                                                                <b>{{ $jadwals->hari }}</b> di <b>{{ $jadwals->kelas }}
+                                                                <b>{{ $jadwals->hari }}</b> di
+                                                                <b>{{ $jadwals->kelas . ' ' . $jadwals->jenis_kelas }}
+                                                                    {{-- @dd($jadwals) --}}
                                                                 </b>
                                                             </p>
                                                         </div>
@@ -344,10 +344,6 @@
     <!-- Select2 -->
     <script src="{{ asset('lte/plugins/select2/js/select2.full.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            loadData();
-        });
-
         $('#modal-input').on('shown.bs.modal', function() {
             loadSelectGuru('guru');
             loadSelectKelas('kelas');
@@ -403,7 +399,7 @@
                 drawCallback: function(settings) { //Error can't search
                     // Reinitialize Select2 on each row
                     $('.select2').select2({
-                        placeholder: 'Select an option',
+                        placeholder: 'Pilih hari jadwal',
                         allowClear: true
                     });
 
@@ -498,5 +494,86 @@
                 }
             }).attr('name', 'mapel');
         }
+        $(document).ready(function() {
+            loadData();
+            $('.select2').select2();
+
+            const availableTimes = [
+                "06:45", "07:00", "07:45", "08:30", "09:15",
+                "10:00", "10:15", "11:00", "11:45", "13:00",
+                "13:45", "14:30", "15:15"
+            ];
+
+            $('#kelas, #hari').on('change', function() {
+                var kelas = $('#kelas').val();
+                var hari = $('#hari').val();
+
+                if (kelas && hari) {
+                    $.ajax({
+                        url: '{{ route('user.user.jadwal.unavailable_times') }}',
+                        type: 'GET',
+                        data: {
+                            kelas: kelas,
+                            hari: hari
+                        },
+                        success: function(data) {
+                            $('#jam_mulai').empty();
+                            $('#jam_selesai').empty();
+
+                            const unavailableTimes = data.map(schedule => schedule.jam_mulai);
+
+                            const filteredTimes = availableTimes.filter(time => !
+                                unavailableTimes.includes(time));
+
+                            filteredTimes.forEach(function(time) {
+                                $('#jam_mulai').append('<option value="' + time + '">' +
+                                    time + '</option>');
+                            });
+
+                            $('#jam_mulai').select2();
+                            $('#jam_selesai').select2();
+                        }
+                    });
+                }
+            });
+
+            $('#jam_mulai').on('change', function() {
+                var kelas = $('#kelas').val();
+                var hari = $('#hari').val();
+                var jamMulai = $(this).val();
+
+                if (kelas && hari && jamMulai) {
+                    $('#jam_selesai').empty();
+
+                    const filteredEndTimes = availableTimes.filter(function(time) {
+                        return time > jamMulai;
+                    });
+
+                    $.ajax({
+                        url: '{{ route('user.jadwal.check_selesai') }}',
+                        type: 'GET',
+                        data: {
+                            kelas: kelas,
+                            hari: hari,
+                            jam_mulai: jamMulai
+                        },
+                        success: function(data) {
+                            const unavailableEndTimes = data.map(schedule => schedule
+                                .jam_selesai);
+
+                            const validEndTimes = filteredEndTimes.filter(time => !
+                                unavailableEndTimes.includes(time));
+
+                            validEndTimes.forEach(function(time) {
+                                $('#jam_selesai').append('<option value="' + time +
+                                    '">' + time + '</option>');
+                            });
+
+                            $('#jam_selesai').select2();
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endsection

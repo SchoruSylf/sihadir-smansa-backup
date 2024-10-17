@@ -75,7 +75,7 @@
                     <div class="col-12 col-sm-6">
                         <div class="card">
                             <div class="card-header">
-                                hari / tanggal
+                                {{ $dayName ." - ". $currentDate }}
                             </div>
                             <div class="card-body">
                                 <table></table>

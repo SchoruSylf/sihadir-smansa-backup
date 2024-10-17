@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportJadwalDummy;
 use App\Exports\ExportPresensi;
 use App\Exports\ExportUser;
 use App\Exports\ExportUserDummy;
@@ -32,5 +33,11 @@ class ExportController extends Controller
     {
         $currentYear = date('Y');
         return Excel::download(new ExportPresensi, "Laporan Presensi Siswa $currentYear .xlsx");
+    }
+
+    public function jadwal_export_dummy(Request $request)
+    {
+        $currentYear = date('Y');
+        return Excel::download(new ExportJadwalDummy, "Contoh Input Jadwal .xlsx");
     }
 }

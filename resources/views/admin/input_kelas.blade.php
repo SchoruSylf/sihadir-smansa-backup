@@ -28,6 +28,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach ($data as $item)
                                         <!-- Edit Modal -->
                                         <div class="modal fade" id="modal-update-kelas{{ $item->id }}" tabindex="-1"
@@ -165,6 +166,7 @@
 
 @section('scripts')
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
     <script>
         $(document).ready(function() {
             loadData();

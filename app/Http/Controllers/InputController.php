@@ -111,10 +111,6 @@ class InputController extends Controller
         $data['email']          = $request->email;
         $data['password']       = Hash::make($request->password);
         User::create($data);
-        // dd($data);
-        // return redirect()->route('user.user.read');
-
-        // return view('admin.input_user');
         return response()->json(['success' => 'Data Pengguna berhasil ditambahkan.']);
     }
     public function user_input_mass(Request $request)

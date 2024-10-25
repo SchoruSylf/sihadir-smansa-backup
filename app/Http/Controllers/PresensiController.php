@@ -368,8 +368,8 @@ class PresensiController extends Controller
     }
     public function check_face(Request $request)
     {
-        $response = Http::post(env("API_URL"), $request->only('image'));
-
+        // $response = Http::post(env("API_URL"), $request->only('image'));
+        $response = Http::post(env('API_URL', 'http://127.0.0.1:5000/'), $request->only('image'));
         if ($response->successful()) {
             $responseData = $response->json();
 

@@ -24,7 +24,7 @@
                         <!-- BAR CHART Kelas 10-->
                         <div class="card card-warning">
                             <div class="card-header">
-                                {{ $data_pengguna }}
+                                {{-- {{ $data_pengguna }} --}}
                                 <h3 class="card-title">Data Presensi Kelas 10</h3>
                             </div>
                             <div class="card-body">
@@ -73,23 +73,50 @@
             @elseif(Session::get('role') == 2)
                 <div class="row">
                     <div class="col-12 col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                {{ $dayName ." - ". $currentDate }}
+                        @if ($checkjadwal != null && count($checkjadwal) > 0)
+                            <div class="card">
+                                <div class="card-header">
+                                    Mata pelajaran yang akan dilaksanakan pada {{ $dayName . ' - ' . $currentDate }}
+                                </div>
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Hari</th>
+                                                <th>Jam Pembelajaran</th>
+                                                <th>Kelas</th>
+                                                <th>Mata Pelajaran</th>
+                                                <th>aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($checkjadwal as $jadwal)
+                                                <tr>
+                                                    <td>{{ $jadwal->hari }}</td>
+                                                    <td>{{ $jadwal->jam_mulai . ' - ' . $jadwal->jam_selesai }}</td>
+                                                    <td>{{ $jadwal->kelas_name . ' ' . $jadwal->kelas_jenis }}</td>
+                                                    <td>{{ $jadwal->mapel_name }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <table></table>
+                        @else
+                            <div class="card">
+                                <div class="card-header">
+                                    Mata pelajaran pada {{ $dayName . ' - ' . $currentDate }} telah selesai
+                                </div>
+                                <div class="card-body">
+                                </div>
                             </div>
-                            <div class="card-footer">
-                                tombol pindah halaman presensi
-                            </div>
-                        </div>
+                        @endif
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="card">
                             <div class="card-header">
-                                header
+                                Riwayat Presensi
                             </div>
                             <div class="card-body">
                                 body

@@ -6,12 +6,36 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class ExportPresensi implements FromCollection, WithHeadings
+class ExportPresensi implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
     /**
      * @return array
      */
+    public function startCell(): string
+    {
+        return 'A12';
+    }
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/img/HeaderCopSurat.jpg'));
+        $drawing->setHeight(120);
+        $drawing->setCoordinates('A1');
+
+        // $drawing2 = new Drawing();
+        // $drawing2->setName('Other image');
+        // $drawing2->setDescription('This is a second image');
+        // $drawing2->setPath(public_path('/img/logo smansa.png'));
+        // $drawing2->setHeight(120);
+        // $drawing2->setCoordinates('M1');
+        return $drawing;
+    }
     public function headings(): array
     {
         // Get distinct dates for headers
@@ -24,15 +48,15 @@ class ExportPresensi implements FromCollection, WithHeadings
         // dd($dates);
         // Return headers including dynamic dates
         return array_merge(
-            ['Nama', 'NIS', 'Jenis Kelamin', 'Kelas', 'Mata Pelajaran'],
+            ['NIS', 'Nama', 'Jenis Kelamin', 'Kelas', 'Mata Pelajaran'],
             $dates,
             ['% Kehadiran'] // Ensure '% Kehadiran' is included at the end
         );
     }
 
+
     public function collection()
     {
-        // Prepare dynamic columns for each unique date
         $dates = DB::table('presensis')
             ->select('tanggal')
             ->distinct()
@@ -49,8 +73,8 @@ class ExportPresensi implements FromCollection, WithHeadings
 
         // Construct the full query
         $query = "
-            SELECT u.name, 
-                u.nomor_induk, 
+            SELECT u.nomor_induk, 
+                u.name, 
                 u.jenis_kelamin, 
                 CONCAT(k.kelas, k.jenis_kelas) AS kelas, 
                 mp.nama_mapel, 

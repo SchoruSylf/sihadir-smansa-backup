@@ -42,8 +42,9 @@
         <aside class="main-sidebar sidebar-dark-blue elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('user.dashboard') }}" class="brand-link">
-                <img src="https://www.sman1ptk.sch.id/image/logo/sman1-pontianak-logo.png" alt="SMANSA Pontianak"
-                    class="brand-image" style="opacity: .8">
+                <img src="{{url('Logo.png')}}" alt="Image" class="brand-image" style="opacity: .8">
+                {{-- <img src="https://www.sman1ptk.sch.id/image/logo/sman1-pontianak-logo.png" alt="SMANSA Pontianak"
+                    class="brand-image" style="opacity: .8"> --}}
                 <span class="brand-text font-weight-light">SMANSA Pontianak</span>
             </a>
 

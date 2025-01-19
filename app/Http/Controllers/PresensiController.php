@@ -115,7 +115,7 @@ class PresensiController extends Controller
             ->where('jadwals.jam_selesai', '>=', $currentTime)
             ->first();
 
-        if ($jdwlsaatini !== null) {
+        if ($jdwlsaatini !== null) {    
             // Check if there is already a presence record for today
             $checkpresensi = DB::table('presensis')
                 ->where('jadwal_id', '=', $jdwlsaatini->id)
@@ -186,12 +186,6 @@ class PresensiController extends Controller
                 ->where('presensis.jadwal_id', '=', $jdwlsaatini->id)
                 ->get(['detail_presensis.id', 'users.nomor_induk', 'user_kelas.user_id', 'users.name', 'detail_presensis.status']);
 
-            // dd($siswa);
-            // $presensis = Db::table('presensis')
-            //     ->where('presensis.jadwal_id', '=', $jdwlsaatini->id)
-            //     ->select('id')
-            //     ->first();
-            // dd($presensis); 
             if ($request->ajax()) {
                 return DataTables::of($siswa)
                     ->addColumn('name', function ($siswa) {

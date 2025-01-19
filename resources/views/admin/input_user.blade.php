@@ -230,61 +230,6 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <!-- Select2 -->
     <script src="{{ asset('lte/plugins/select2/js/select2.full.min.js') }}"></script>
-    {{-- <script>
-        $(function() {
-            bsCustomFileInput.init();
-        });
-
-        $(document).ready(function() {
-            loadData();
-        });
-
-        function loadData() {
-            $('#tableUser').DataTable({
-                searchDelay: 350,
-                processing: true,
-                paging: true,
-                autoWidth: false,
-                serverSide: true,
-                responsive: true,
-                searching: true,
-                ordering: true,
-                destroy: true,
-                ajax: {
-                    url: "{{ route('user.user.read') }}",
-                    type: 'GET',
-                },
-                columns: [{
-                        data: 'nomor_induk',
-                        name: 'nomor_induk'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'role',
-                        name: 'role'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'aksi',
-                        name: 'aksi',
-                        orderable: false,
-                        searchable: false
-                    },
-                ],
-                deferRender: true,
-            });
-        }
-    </script> --}}
 
     <script>
         $(function() {

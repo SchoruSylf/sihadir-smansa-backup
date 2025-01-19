@@ -47,8 +47,9 @@
                     @if (Session::get('role') == 1 || Session::get('role') == 2)
                         <div class="card">
                             <div class="card-body">
+                                
                                 <a class="btn btn-warning mb-3" href="{{ route('user.history.detail.export') }}">
-                                    Export Riwayat Presensi
+                                    Export Riwayat Presensi ( Semua Kelas )
                                 </a>
                                 <div class="table-responsive">
                                     <table id="tableHistory" class="table table-bordered table-striped">

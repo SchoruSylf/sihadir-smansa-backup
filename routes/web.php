@@ -38,6 +38,7 @@ Route::get('users/destroy/{id}/', [UserController::class, 'destroy']);
 Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'as' => 'user.'], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard-admin',[DashboardController::class, 'loadChartData'])->name('dashboard.admin');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
